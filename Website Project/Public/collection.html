@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collection</title>
+    <link rel="stylesheet" href="homeStyle.css">
+
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    
+</head>
+
+<header class="site-header">
+    <h1 class="website-title">Title Here</h1>
+    
+    <nav class="navigation">
+        <ul class="nav-links">
+            <li> <a href = "home.html">Home</a> </li>
+            <li> <a href = "collection.html">Collection</a> </li>
+            <li> <a id="loginBtnLink" href = "login.html">Login (Admin Only)</a> </li>
+        </ul>
+    </nav>
+</header>
+
+<body>
+    <h1 class="title">My Pokemon Collection</h1>
+    <nav class="filters">
+        <ul>
+            <li>
+                <label for="collection-search" id="collection-search-label">Search For Cards:</label>
+                <input type="text" id="collection-search" name="collection-search">
+            </li>
+            <li>
+                <label for ="set-filter" id="set-filter-label">Filter by Sets:</label>
+                <select id="set-filter" name="set-filter" multiple="multiple">
+                    <!-- Options will be populated dynamically -->
+                </select>
+            </li>
+        </ul>
+    </nav>
+</body>
+
+<div id="card-container" class="card-container"></div>
+
+<!-- 2) jQuery (required for Select2) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- 3) Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@tcgdex/sdk@2/dist/tcgdex.browser.js"></script>
+<script src="collection.js"></script>
+
+</html>

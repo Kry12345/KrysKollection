@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Collection</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Update Your Collection Here</h1>
+    </header>
+
+    <main>
+        <label for="searchInput">Search for a card here:</label>
+        <input type="text" id="searchInput" name="searchInput" placeholder="Type here…">
+
+        <button id="addNewCard">Add New Card to Collection</button>
+        <div id="card-container" class="card-container"></div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tcgdex/sdk@2/dist/tcgdex.browser.js"></script>
+    <script src="updateCollection.js"></script>
+</body>
+</html>

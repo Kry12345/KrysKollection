@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample HTML Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to Binder 1</h1>
+    </header>
+    <main>
+        <p>Here is what I have in my 151 Master Set Binder</p>
+        
+        <label for="searchInput">Search for a card here:</label>
+        <input type="text" id="searchInput" name="searchInput" placeholder="Type here…">
+        <div id="card-container" class="card-container"></div>
+
+        <div id="pagination"></div>
+    </main>
+    <footer>
+        <p>&copy; Sample Page</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tcgdex/sdk@2/dist/tcgdex.browser.js"></script>
+    <script src="binder1.js"></script>
+</html>
