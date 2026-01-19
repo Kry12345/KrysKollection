@@ -20,7 +20,7 @@ let displayCards = [];
 let currentSetFilter = [];
 let currentSearchQuery = "";
 
-let personalServer = "http://localhost:3000/api";
+let personalServer = "https://kryskollection1.onrender.com/api";
 
 searchInput.addEventListener("input", () => {
     currentSearchQuery = searchInput.value;

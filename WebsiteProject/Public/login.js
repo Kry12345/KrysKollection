@@ -1,4 +1,4 @@
-let personalServer = "http://localhost:3000/api";
+let personalServer = "https://kryskollection1.onrender.com/api";
 
 document.getElementById('loginForm').addEventListener('submit', async e => {
     e.preventDefault();
