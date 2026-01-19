@@ -4,7 +4,7 @@ const cors = require("cors");
 const routes = require('./routes');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 // Let Express parse JSON body (for POST requests)
 app.use(cors({
@@ -22,6 +22,12 @@ app.use(express.static(path.join(__dirname, '../../Public')));
 
 // Use the routes defined in routes.js
 app.use('/api', routes);
+
+app.get("/", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "../../Public/home.html")
+  );
+});
 
 
 // Start the server
