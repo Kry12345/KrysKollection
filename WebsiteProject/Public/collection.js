@@ -13,6 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
 const tcgdex = new TCGdex("en");
 
 const searchInput = document.getElementById("collection-search");
+const prevButton = document.getElementById("prevBtn");
+const nextButton = document.getElementById("nextBtn");
 
 let allCards = [];
 let displayCards = [];
@@ -20,10 +22,14 @@ let displayCards = [];
 let currentSetFilter = [];
 let currentSearchQuery = "";
 
+let currentPage = 1;
+const cardsPerPage = 12;
+
 let personalServer = "https://kryskollection1.onrender.com/api";
 
 searchInput.addEventListener("input", () => {
     currentSearchQuery = searchInput.value;
+    currentPage = 1; // reset to first page on new search/filter
     updateDisplayCards();
 });
 
@@ -37,6 +43,7 @@ $(document).ready(function() {
 $('#set-filter').on('change', function () {
     const selectedValues = $(this).val(); // array or null
     currentSetFilter = selectedValues || [];
+    currentPage = 1; // reset to first page on new search/filter
     updateDisplayCards();
 });
 
@@ -82,7 +89,7 @@ async function createFilters() {
 
 //format card HTML
 function formatCardHtml(card) {
-    const highQualityPng = getHighQualityPictureUrl(card);
+    const highQualityPng = getLowQualityPictureUrl(card);
     html = `<h2>${card.name}</h2>
         <img src="${highQualityPng}" alt="${card.name}" width="250">
         <p>Set: ${card.set.name}</p>
@@ -96,8 +103,8 @@ function formatCardHtml(card) {
 }
 
 // Get high quality picture URL
-function getHighQualityPictureUrl(card) {
-    return card.image + "/high.png";
+function getLowQualityPictureUrl(card) {
+    return card.image + "/low.png";
 }
 
 async function searchCollectionCards(query) {
@@ -122,7 +129,12 @@ async function showCollectionCards() {
     console.log("Getting collection cards...");
     const container = document.getElementById("card-container");
     container.innerHTML = "";
-    for (let cardData of displayCards)
+
+    const start = (currentPage - 1) * cardsPerPage;
+    const end = start + cardsPerPage;
+    const pageCards = displayCards.slice(start, end);
+
+    for (let cardData of pageCards)
     {
         const cardElem = document.createElement("div");
         cardElem.classList.add("card"); // add your CSS class
@@ -136,16 +148,101 @@ async function showCollectionCards() {
     }
 }
 
-async function updateDisplayCards() {
-    filterSets(currentSetFilter).then(() => {
-        searchCollectionCards(currentSearchQuery).then(() => {
+function setupPagination() {
+    const pageNumbers = document.getElementById("pageNumbers");
+    pageNumbers.innerHTML = "";
+
+    const pageCount = Math.ceil(displayCards.length / cardsPerPage);
+    const maxVisible = 7;
+
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+    let endPage = startPage + maxVisible - 1;
+
+    // Fix if we go past the total pages
+    if (endPage > pageCount) {
+        endPage = pageCount;
+        startPage = Math.max(1, endPage - maxVisible + 1);
+    }
+
+    if (currentPage == 1)
+    {
+        prevButton.disabled = true;
+    }
+    else
+    {
+        prevButton.disabled = false;
+    }
+
+    if (currentPage == pageCount)
+    {
+        nextButton.disabled = true;
+    }
+    else
+    {
+        nextButton.disabled = false;
+    }
+
+    // Optional: show "..." before
+    if (startPage > 1) {
+        const dots = document.createElement("span");
+        dots.innerText = "... ";
+        pageNumbers.appendChild(dots);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+        const btn = document.createElement("button");
+        btn.innerText = i;
+
+        if (i === currentPage) btn.classList.add("active");
+
+        btn.onclick = () => {
+            currentPage = i;
             showCollectionCards();
-        });
-    });
+            setupPagination();
+        };
+
+        pageNumbers.appendChild(btn);
+    }
+
+    // Optional: show "..." after
+    if (endPage < pageCount) {
+        const dots = document.createElement("span");
+        dots.innerText = " ...";
+        pageNumbers.appendChild(dots);
+    }
 }
 
-fetchCollectionCards().then(() => {
+async function updateDisplayCards() {
+    displayCards = allCards; // RESET before filtering
+
+    await filterSets(currentSetFilter);
+    await searchCollectionCards(currentSearchQuery);
+
+    
+
     showCollectionCards();
+    setupPagination();
+}
+
+prevButton.onclick = () => {
+    if (currentPage > 1) {
+        currentPage--;
+        showCollectionCards();
+        setupPagination();
+    }
+};
+
+nextButton.onclick = () => {
+    const pageCount = Math.ceil(displayCards.length / cardsPerPage);
+    if (currentPage < pageCount) {
+        currentPage++;
+        showCollectionCards();
+        setupPagination();
+    }
+};
+
+fetchCollectionCards().then(() => {
+    updateDisplayCards();
 });
 
 
