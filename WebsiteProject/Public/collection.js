@@ -26,7 +26,7 @@ let currentSearchQuery = "";
 let currentPage = 1;
 const cardsPerPage = 12;
 
-let personalServer = "http://localhost:3000/api";
+let personalServer = "https://kryskollection1.onrender.com/api";
 
 searchInput.addEventListener("input", () => {
     currentSearchQuery = searchInput.value;
