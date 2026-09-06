@@ -15,6 +15,7 @@ const tcgdex = new TCGdex("en");
 const searchInput = document.getElementById("collection-search");
 const prevButton = document.getElementById("prevBtn");
 const nextButton = document.getElementById("nextBtn");
+const loadingCardsText = document.getElementById("loading-cards");
 
 let allCards = [];
 let displayCards = [];
@@ -25,7 +26,7 @@ let currentSearchQuery = "";
 let currentPage = 1;
 const cardsPerPage = 12;
 
-let personalServer = "https://kryskollection1.onrender.com/api";
+let personalServer = "http://localhost:3000/api";
 
 searchInput.addEventListener("input", () => {
     currentSearchQuery = searchInput.value;
@@ -51,17 +52,24 @@ $('#set-filter').on('change', function () {
 
 // Fetch all collection cards from the server
 async function fetchCollectionCards() {
+    loadingCardsText.hidden = false;
     const response = await fetch(personalServer + "/collection");
     const data = await response.json();
 
     allCards = await Promise.all(
         data.map(async cardData => {
-            const card = await tcgdex.fetch("cards", cardData.id);
-            card.quantity = cardData.quantity; // add quantity so we can show it
-            card.reverse_quantity = cardData.reverse_quantity; // add reverse_quantity so we can show it
-            return card;
+            try {
+                console.log(cardData.id);
+                const card = await tcgdex.fetch("cards", cardData.id);
+                card.quantity = cardData.quantity; // add quantity so we can show it
+                card.reverse_quantity = cardData.reverse_quantity; // add reverse quantity so we can show it
+                return card;
+            } catch (error) {
+                console.error(`Unable to retrieve card ${cardData.id} from TCGdex:`, error);
+                return null;
+            }
         })
-    );
+    ).then(cards => cards.filter(card => card !== null));
 
     displayCards = allCards; // initially show all cards
     console.log("Fetched all cards:", allCards);
@@ -127,6 +135,7 @@ async function filterSets(selectedValues) {
 // Function to update displayed cards based on search input
 async function showCollectionCards() {
     console.log("Getting collection cards...");
+    loadingCardsText.hidden = true;
     const container = document.getElementById("card-container");
     container.innerHTML = "";
 

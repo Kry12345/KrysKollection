@@ -1,4 +1,5 @@
-let personalServer = "https://kryskollection1.onrender.com/api";
+///https://kryskollection1.onrender.com/api
+let personalServer = "http://localhost:3000/api";
 
 const token = localStorage.getItem("token");
 
