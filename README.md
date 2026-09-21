@@ -2,6 +2,8 @@
 
 Krys Kollection is a card collection website with a static public interface and an Express API backed by SQLite. The API provides collection data, set data, login authentication, and protected card-quantity updates. The website is currently being hosted at https://kryskollection1.onrender.com/collection.html. Please give it a minute or two to open up.
 
+This repository also has a folder called "OldSite" which contains a previous attempt I had of making this site. Feel free to check it out if you are interested.
+
 ## Project Structure
 
 ```text
